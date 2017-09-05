@@ -59,9 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="InvalidKeyComboException.cs" />
-    <Compile Include="InvalidStateException.cs" />
     <Compile Include="KeyCombo.cs" />
-    <Compile Include="StateMachine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

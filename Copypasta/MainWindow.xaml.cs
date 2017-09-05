@@ -21,9 +21,6 @@ namespace Copypasta
         {
             _hotkey.HotkeyPressed += HotkeyPressed;
             InitializeComponent();
-
-            fsm.Configure("state1")
-                .per
         }
 
         private void HotkeyPressed(object sender, EventArgs e)
