@@ -105,13 +105,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClipboardNotification\ClipboardNotification.csproj">
+    <ProjectReference Include="..\Copypasta.Notifications\Copypasta.Notifications.csproj">
       <Project>{63c91c1b-f150-47f6-a5f1-919b155f0d19}</Project>
-      <Name>ClipboardNotification</Name>
+      <Name>Copypasta.Notifications</Name>
     </ProjectReference>
     <ProjectReference Include="..\Hooks\Hooks.csproj">
       <Project>{76466271-6305-457A-AD48-68EC22E9172D}</Project>
-      <Name>Hook</Name>
+      <Name>Hooks</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

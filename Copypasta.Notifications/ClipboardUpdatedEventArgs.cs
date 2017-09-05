@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClipboardNotification
+namespace Copypasta.Notifications
 {
     public class ClipboardUpdatedEventArgs : EventArgs
     {

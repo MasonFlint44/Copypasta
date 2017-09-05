@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Interop;
 
-namespace ClipboardNotification
+namespace Copypasta.Notifications
 {
-    public class ClipboardNotifier
+    public class ClipboardNotification
     {
         public delegate void ClipboardUpdatedEventHandler(object sender, ClipboardUpdatedEventArgs e);
 
@@ -13,7 +13,7 @@ namespace ClipboardNotification
         private Window _window;
         private IntPtr _handle;
 
-        public ClipboardNotifier(Window window)
+        public ClipboardNotification(Window window)
         {
             _window = window;
             _handle = new WindowInteropHelper(window).EnsureHandle();
@@ -34,7 +34,7 @@ namespace ClipboardNotification
             return IntPtr.Zero;
         }
 
-        ~ClipboardNotifier()
+        ~ClipboardNotification()
         {
             NativeMethods.RemoveClipboardFormatListener(_handle);
         }

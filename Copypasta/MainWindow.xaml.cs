@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media.Animation;
-using ClipboardNotification;
+using Copypasta.Notifications;
 
 namespace Copypasta
 {
@@ -13,7 +13,7 @@ namespace Copypasta
         //private MouseTracker _mouseTracker = new MouseTracker();
         private KeyTracker _keyTracker = new KeyTracker();
         private Hotkey _hotkey = new Hotkey(new KeyCombo("ctrl").And("v"));
-        private ClipboardNotifier clipboardNotification;
+        private ClipboardNotification clipboardNotification;
 
         private Stateless.StateMachine<string, string> fsm = new Stateless.StateMachine<string, string>("initial");
 
@@ -47,7 +47,7 @@ namespace Copypasta
 
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
-            clipboardNotification = new ClipboardNotifier(this);
+            clipboardNotification = new ClipboardNotification(this);
             clipboardNotification.ClipboardUpdated += OnClipboardUpdated;
         }
     }

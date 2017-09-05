@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Copypasta", "Copypasta\Copy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hooks", "Hooks\Hooks.csproj", "{76466271-6305-457A-AD48-68EC22E9172D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipboardNotification", "ClipboardNotification\ClipboardNotification.csproj", "{63C91C1B-F150-47F6-A5F1-919B155F0D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trackers", "Trackers\Trackers.csproj", "{8D510984-CB36-485E-AB4E-A123E5B7F989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Copypasta.Notifications", "Copypasta.Notifications\Copypasta.Notifications.csproj", "{63C91C1B-F150-47F6-A5F1-919B155F0D19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{76466271-6305-457A-AD48-68EC22E9172D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76466271-6305-457A-AD48-68EC22E9172D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76466271-6305-457A-AD48-68EC22E9172D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D510984-CB36-485E-AB4E-A123E5B7F989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D510984-CB36-485E-AB4E-A123E5B7F989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D510984-CB36-485E-AB4E-A123E5B7F989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D510984-CB36-485E-AB4E-A123E5B7F989}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63C91C1B-F150-47F6-A5F1-919B155F0D19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63C91C1B-F150-47F6-A5F1-919B155F0D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63C91C1B-F150-47F6-A5F1-919B155F0D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
