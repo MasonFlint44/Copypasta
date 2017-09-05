@@ -1,7 +1,7 @@
 ﻿using System;
 using Trackers;
 
-namespace Copypasta
+namespace Hotkeys
 {
     public class Hotkey
     {
@@ -17,7 +17,7 @@ namespace Copypasta
             _keyTracker.KeyPressed += OnKeyPressed;
         }
 
-        private void OnKeyPressed(object sender, Hooks.KeyHookEventArgs e)
+        private void OnKeyPressed(object sender, KeyTrackerEventArgs e)
         {
             if(_keyTracker.Pressed.Count != _keyCombo.Count) { return; }
 

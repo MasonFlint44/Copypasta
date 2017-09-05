@@ -10,9 +10,11 @@ namespace Trackers
         private Dictionary<Key, DateTime> _keyPressedValues = new Dictionary<Key, DateTime>();
         private KeyboardHook _hook = new KeyboardHook();
 
+        public delegate void KeyTrackerEventHandler(object sender, KeyTrackerEventArgs e);
+
         public List<Key> Pressed = new List<Key>();
-        public event KeyboardHook.KeyHookEventHandler KeyPressed;
-        public event KeyboardHook.KeyHookEventHandler KeyUnpressed;
+        public event KeyTrackerEventHandler KeyPressed;
+        public event KeyTrackerEventHandler KeyUnpressed;
 
         public KeyTracker()
         {
@@ -23,7 +25,11 @@ namespace Trackers
         private void OnKeyUp(object sender, KeyHookEventArgs e)
         {
             Release(e.KeyCode);
-            KeyUnpressed?.Invoke(this, e);
+            KeyUnpressed?.Invoke(this, new KeyTrackerEventArgs
+            {
+                Handled = e.Handled,
+                KeyCode = e.KeyCode
+            });
         }
 
         private void OnKeyDown(object sender, KeyHookEventArgs e)
@@ -31,7 +37,11 @@ namespace Trackers
             if(IsPressed(e.KeyCode)) { return; }
 
             Press(e.KeyCode);
-            KeyPressed?.Invoke(this, e);
+            KeyPressed?.Invoke(this, new KeyTrackerEventArgs
+            {
+                Handled = e.Handled,
+                KeyCode = e.KeyCode
+            });
         }
 
         public DateTime? GetTime(Key key)

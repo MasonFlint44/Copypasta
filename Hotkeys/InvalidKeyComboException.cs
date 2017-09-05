@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Copypasta
+namespace Hotkeys
 {
     public class InvalidKeyComboException : Exception
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 
-namespace Copypasta
+namespace Hotkeys
 {
     public class KeyCombo
     {

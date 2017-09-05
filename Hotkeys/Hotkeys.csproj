@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8D510984-CB36-485E-AB4E-A123E5B7F989}</ProjectGuid>
+    <ProjectGuid>{F674F2D6-E3E8-4F62-90C2-D01B03F4004E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Trackers</RootNamespace>
-    <AssemblyName>Trackers</AssemblyName>
+    <RootNamespace>Hotkeys</RootNamespace>
+    <AssemblyName>Hotkeys</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,15 +41,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TrackerEventArgs.cs" />
-    <Compile Include="KeyTrackerEventArgs.cs" />
-    <Compile Include="KeyTracker.cs" />
+    <Compile Include="Hotkey.cs" />
+    <Compile Include="InvalidKeyComboException.cs" />
+    <Compile Include="KeyCombo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hooks\Hooks.csproj">
-      <Project>{76466271-6305-457a-ad48-68ec22e9172d}</Project>
-      <Name>Hooks</Name>
+    <ProjectReference Include="..\Trackers\Trackers.csproj">
+      <Project>{8d510984-cb36-485e-ab4e-a123e5b7f989}</Project>
+      <Name>Trackers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -58,8 +58,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="InvalidKeyComboException.cs" />
-    <Compile Include="KeyCombo.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -70,7 +68,6 @@
     </Compile>
     <Compile Include="ClipboardManager.cs" />
     <Compile Include="CopypastaState.cs" />
-    <Compile Include="Hotkey.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -108,9 +105,9 @@
       <Project>{63c91c1b-f150-47f6-a5f1-919b155f0d19}</Project>
       <Name>Copypasta.Notifications</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Hooks\Hooks.csproj">
-      <Project>{76466271-6305-457A-AD48-68EC22E9172D}</Project>
-      <Name>Hooks</Name>
+    <ProjectReference Include="..\Hotkeys\Hotkeys.csproj">
+      <Project>{f674f2d6-e3e8-4f62-90c2-d01b03f4004e}</Project>
+      <Name>Hotkeys</Name>
     </ProjectReference>
     <ProjectReference Include="..\Trackers\Trackers.csproj">
       <Project>{8d510984-cb36-485e-ab4e-a123e5b7f989}</Project>

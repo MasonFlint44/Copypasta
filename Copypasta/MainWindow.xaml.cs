@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using Copypasta.Notifications;
 using Trackers;
+using Hotkeys;
 
 namespace Copypasta
 {
