@@ -71,7 +71,6 @@
     <Compile Include="ClipboardManager.cs" />
     <Compile Include="CopypastaState.cs" />
     <Compile Include="Hotkey.cs" />
-    <Compile Include="KeyTracker.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -112,6 +111,10 @@
     <ProjectReference Include="..\Hooks\Hooks.csproj">
       <Project>{76466271-6305-457A-AD48-68EC22E9172D}</Project>
       <Name>Hooks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Trackers\Trackers.csproj">
+      <Project>{8d510984-cb36-485e-ab4e-a123e5b7f989}</Project>
+      <Name>Trackers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

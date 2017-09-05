@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Copypasta
+namespace Trackers
 {
     public class KeyTracker
     {
