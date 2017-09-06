@@ -13,10 +13,16 @@ namespace Copypasta.Notifications
         private Window _window;
         private IntPtr _handle;
 
-        public ClipboardNotification(Window window)
+        public ClipboardNotification(Window window = null)
         {
-            _window = window;
-            _handle = new WindowInteropHelper(window).EnsureHandle();
+            _window = window ?? new Window();
+            _handle = new WindowInteropHelper(_window).EnsureHandle();
+
+            // Create new message-only window to monitor clipboard
+            if(window == null)
+            {
+                NativeMethods.SetParent(_handle, NativeMethods.HWND_MESSAGE);
+            }
 
             NativeMethods.AddClipboardFormatListener(_handle);
 

@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Media.Animation;
 using Copypasta.Notifications;
-using Trackers;
 using Hotkeys;
 
 namespace Copypasta
@@ -12,8 +11,6 @@ namespace Copypasta
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private MouseTracker _mouseTracker = new MouseTracker();
-        private KeyTracker _keyTracker = new KeyTracker();
         private Hotkey _hotkey = new Hotkey(new KeyCombo("ctrl").And("v"));
         private ClipboardNotification clipboardNotification;
 
@@ -23,6 +20,14 @@ namespace Copypasta
         {
             _hotkey.HotkeyPressed += HotkeyPressed;
             InitializeComponent();
+
+            clipboardNotification = new ClipboardNotification();
+            clipboardNotification.ClipboardUpdated += OnClipboardUpdate;
+        }
+
+        private void OnClipboardUpdate(object sender, ClipboardUpdatedEventArgs e)
+        {
+            Console.WriteLine("Clipboard updated 1");
         }
 
         private void HotkeyPressed(object sender, EventArgs e)
