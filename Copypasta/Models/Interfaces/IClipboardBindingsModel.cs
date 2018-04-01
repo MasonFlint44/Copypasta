@@ -1,10 +1,12 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 namespace Copypasta.Models.Interfaces
 {
     public interface IClipboardBindingsModel
     {
-        void AddBinding(Key key, IClipboardItemModel clipboardItem);
+        event EventHandler BindingAdded;
+        void AddBinding(IClipboardItemModel clipboardItem);
         IClipboardItemModel GetData(Key key);
     }
 }

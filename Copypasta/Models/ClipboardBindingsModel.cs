@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using Copypasta.Models.Interfaces;
 
@@ -8,10 +9,12 @@ namespace Copypasta.Models
     {
         private readonly IDictionary<Key, IClipboardItemModel> _clipboardBindings = new Dictionary<Key, IClipboardItemModel>();
 
-        public void AddBinding(Key key, IClipboardItemModel clipboardItem)
+        public event EventHandler BindingAdded;
+
+        public void AddBinding(IClipboardItemModel clipboardItem)
         {
-            clipboardItem.Key = key;
-            _clipboardBindings[key] = clipboardItem;
+            _clipboardBindings[clipboardItem.Key] = clipboardItem;
+            BindingAdded?.Invoke(this, EventArgs.Empty);
         }
 
         public IClipboardItemModel GetData(Key key)

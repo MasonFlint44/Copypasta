@@ -55,6 +55,7 @@ namespace Copypasta.Controllers
                 _clipboardWriterStateMachine.SetTriggerParameters<IClipboardItemModel>(ClipboardWriterTrigger.Write);
 
             ConfigureCopypastaStateMachine();
+            ConfigureClipboardWriterStateMachine();
             ConfigureEventTriggers();
         }
 
@@ -106,6 +107,11 @@ namespace Copypasta.Controllers
                 Console.WriteLine($"EscPressed: Handled={_escPressHandled}");
                 args.Handled = _escPressHandled;
                 _copypastaStateMachine.Fire(CopypastaTrigger.EscPressed);
+            };
+            _clipboardBindingsModel.BindingAdded += (sender, args) =>
+            {
+                Console.WriteLine("BindingAdded");
+                _copypastaStateMachine.Fire(CopypastaTrigger.ClipboardBound);
             };
         }
 
@@ -177,12 +183,10 @@ namespace Copypasta.Controllers
 
                     // Bind clipboard to key
                     var clipboardItem = _clipboardHistoryModel.History[0];
-                    _clipboardBindingsModel.AddBinding(key, clipboardItem);
+                    clipboardItem.Key = key;
+                    _clipboardBindingsModel.AddBinding(clipboardItem);
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
-
-                    // TODO: ClipboardBindingsModel should fire event for this trigger
-                    _copypastaStateMachine.Fire(CopypastaTrigger.ClipboardBound);
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.Pasting)
@@ -293,7 +297,10 @@ namespace Copypasta.Controllers
                     // Restore clipboard data
                     _clipboardWriterStateMachine.Fire(_writingToClipboard, _clipboardSwap);
                 });
+        }
 
+        private void ConfigureClipboardWriterStateMachine()
+        {
             _clipboardWriterStateMachine.Configure(ClipboardWriterState.Idle)
                 .Permit(ClipboardWriterTrigger.Write, ClipboardWriterState.ClearingClipboard)
                 .Ignore(ClipboardWriterTrigger.ClipboardUpdated);
