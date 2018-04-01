@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Copypasta</RootNamespace>
     <AssemblyName>Copypasta</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,9 +34,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Stateless, Version=3.0.0.0, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stateless.3.1.0\lib\net45\Stateless.dll</HintPath>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    </Reference>
+    <Reference Include="Stateless, Version=4.0.0.0, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stateless.4.0.0\lib\net45\Stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -52,28 +64,64 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
+      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ClipboardManager.cs" />
-    <Compile Include="CopypastaState.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Controllers\CopypastaController.cs" />
+    <Compile Include="Models\Interfaces\IClipboardModel.cs" />
+    <Compile Include="Models\Interfaces\IPropertyUpdatedEventArgs%28T%29.cs" />
+    <Compile Include="Models\Interfaces\IPropertyUpdatedEventArgs.cs" />
+    <Compile Include="Models\PropertyUpdatedEventArgs%28T%29.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="StateMachine\ClipboardWriterState.cs" />
+    <Compile Include="StateMachine\ClipboardWriterTrigger.cs" />
+    <Compile Include="ViewModels\Designer\DesignerHistoryMenuViewModel.cs" />
+    <Compile Include="ViewModels\Designer\DesignerHistoryRecordViewModel.cs" />
+    <Compile Include="ViewModels\HistoryRecordViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IHistoryRecordViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\INotificationViewModel.cs" />
+    <Compile Include="Models\ClipboardBindingsModel.cs" />
+    <Compile Include="Models\ClipboardHistoryModel.cs" />
+    <Compile Include="Models\ClipboardItemModel.cs" />
+    <Compile Include="Models\ClipboardModel.cs" />
+    <Compile Include="Models\PropertyUpdatedEventArgs.cs" />
+    <Compile Include="Models\Interfaces\IClipboardItemModel.cs" />
+    <Compile Include="Models\Interfaces\IClipboardHistoryModel.cs" />
+    <Compile Include="Models\Interfaces\IClipboardBindingsModel.cs" />
+    <Compile Include="ViewModels\HistoryMenuViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IHistoryMenuViewModel.cs" />
+    <Compile Include="ViewModels\NotificationViewModel.cs" />
+    <Compile Include="Views\NotifyIconWindow.xaml.cs">
+      <DependentUpon>NotifyIconWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\HistoryRecord.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="StateMachine\CopypastaState.cs" />
+    <Compile Include="StateMachine\CopypastaTrigger.cs" />
+    <Compile Include="Views\HistoryRecord.xaml.cs">
+      <DependentUpon>HistoryRecord.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\HistoryMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotifyIconWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Views\HistoryMenu.xaml.cs">
+      <DependentUpon>HistoryMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -101,14 +149,38 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Copypasta.Notifications\Copypasta.Notifications.csproj">
-      <Project>{63c91c1b-f150-47f6-a5f1-919b155f0d19}</Project>
-      <Name>Copypasta.Notifications</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Hotkeys\Hotkeys.csproj">
+    <ProjectReference Include="..\PaperClip.Hotkeys\PaperClip.Hotkeys.csproj">
       <Project>{f674f2d6-e3e8-4f62-90c2-d01b03f4004e}</Project>
-      <Name>Hotkeys</Name>
+      <Name>PaperClip.Hotkeys</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PaperClip.Clipboard\PaperClip.Clipboard.csproj">
+      <Project>{78B858D5-473A-4A1E-9410-F977F522165D}</Project>
+      <Name>PaperClip.Clipboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaperClip.Collections\PaperClip.Collections.csproj">
+      <Project>{14B2A0D4-B2B7-49E8-93D3-498FC93C6898}</Project>
+      <Name>PaperClip.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Copypasta.DataAccess\Copypasta.DataAccess.csproj">
+      <Project>{943C42F7-2260-42A6-9839-C96FB776F7A6}</Project>
+      <Name>Copypasta.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaperClip.Trackers\PaperClip.Trackers.csproj">
+      <Project>{6F345E5A-A37E-477E-918A-3045E3E214CA}</Project>
+      <Name>PaperClip.Trackers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\NotifyIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controllers\CopypastaControllerStateDiagram.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

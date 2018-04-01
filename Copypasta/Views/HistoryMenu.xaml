@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Copypasta.Views.HistoryMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Copypasta.Views"
+             xmlns:designer="clr-namespace:Copypasta.ViewModels.Designer"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance designer:DesignerHistoryMenuViewModel, IsDesignTimeCreatable=True}">
+    <Border Background="#333333"
+            Opacity=".9"
+            Padding="10">
+        <StackPanel Width="230">
+            <Label Padding="5 0 5 5"
+                   Foreground="White"
+                   Content="History"/>
+            <Border BorderBrush="#7F7F7F"
+                    BorderThickness="0 1 0 0" 
+                    Visibility="{Binding HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}}">
+                <TextBlock Padding="5" 
+                           Foreground="White"
+                           Visibility="{Binding HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}}">
+                    Empty
+                </TextBlock>
+            </Border>
+            <ItemsControl x:Name="HistoryPanel"
+                          ItemsSource="{Binding HistoryList}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:HistoryRecord DataContext="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Copypasta.Views.HistoryRecord"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Copypasta"
+             xmlns:designer="clr-namespace:Copypasta.ViewModels.Designer"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance designer:DesignerHistoryRecordViewModel, IsDesignTimeCreatable=True}">
+    <Border BorderBrush="#7F7F7F"
+            BorderThickness="0 1 0 0">
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Center">
+            <Border BorderThickness="0 0 1 0" 
+                    BorderBrush="#7F7F7F" 
+                    Padding="0 5">
+                <TextBlock x:Name="KeyTextBlock"
+                           Foreground="White" 
+                           Width="30" 
+                           TextAlignment="Center"
+                           Text="{Binding Key}"/>
+            </Border>
+            <TextBlock x:Name="ClipboardContentTextBlock"
+                       Padding="5 0 0 0" 
+                       Foreground="White" 
+                       Width="200" 
+                       VerticalAlignment="Center" 
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding ClipboardText}"/>
+        </StackPanel>
+    </Border>
+</UserControl>
