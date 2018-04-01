@@ -11,10 +11,9 @@ namespace PaperClip.Hotkeys
     public class Hotkey : IHotkey
     {
         private readonly IKeyTracker _keyTracker;
-        private int _combosIndex;
         private readonly List<IKeyCombo> _combos;
+        private List<IKeyCombo>.Enumerator _combosEnumerator;
         private HashSet<Key> _pressedKeys;
-        private IKeyCombo CurrentCombo => _combos[_combosIndex];
 
         public event EventHandler<IHotkeyEventArgs> HotkeyPressed;
         public bool Handled { get; set; }
@@ -24,6 +23,7 @@ namespace PaperClip.Hotkeys
         {
             _keyTracker = keyTracker;
             _combos = combos.ToList();
+            _combosEnumerator = _combos.GetEnumerator();
             _keyTracker.KeyPressed += OnKeyPressed;
             _keyTracker.KeyUnpressed += OnKeyUnpressed;
         }
@@ -34,11 +34,11 @@ namespace PaperClip.Hotkeys
 
         private void OnKeyPressed(object sender, IKeyTrackerEventArgs e)
         {
-            if (CurrentCombo.IsPressed(_keyTracker.Modifiers, e.Key))
+            if (_combosEnumerator.Current.IsPressed(_keyTracker.Modifiers, e.Key))
             {
-                if (_combos.Count != ++_combosIndex) return;
+                if (_combosEnumerator.MoveNext()) return;
 
-                _combosIndex = 0;
+                _combosEnumerator = _combos.GetEnumerator();
 
                 var args = new HotkeyEventArgs
                 {
@@ -54,7 +54,7 @@ namespace PaperClip.Hotkeys
             else if (!e.IsModifier)
             {
                 IsPressed = false;
-                _combosIndex = 0;
+                _combosEnumerator = _combos.GetEnumerator();
             }
         }
 
@@ -64,7 +64,7 @@ namespace PaperClip.Hotkeys
             if (!_pressedKeys.Contains(e.Key)) { return; }
 
             IsPressed = false;
-            _combosIndex = 0;
+            _combosEnumerator = _combos.GetEnumerator();
         }
     }
 }
