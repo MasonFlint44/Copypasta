@@ -49,6 +49,8 @@
     <Compile Include="EmptyListToCollapsedVisibilityConverter.cs" />
     <Compile Include="Interfaces\ICircularListUpdatedEventArgs.cs" />
     <Compile Include="Interfaces\ICircularList.cs" />
+    <Compile Include="Interfaces\IOrderedDictionary.cs" />
+    <Compile Include="OrderedDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

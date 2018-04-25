@@ -2,13 +2,12 @@
 using System.Windows.Input;
 using WindowsInput;
 using Copypasta.Controllers;
-using Copypasta.DataAccess;
 using Copypasta.Models;
 using Copypasta.ViewModels;
 using Copypasta.Views;
-using PaperClip.Clipboard;
 using PaperClip.Hotkeys;
 using PaperClip.Trackers;
+using Clipboard = PaperClip.Clipboard.Clipboard;
 
 namespace Copypasta
 {
@@ -19,7 +18,7 @@ namespace Copypasta
     {
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            var clipboardModel = new ClipboardModel(new ClipboardDataAccess(), new ClipboardMonitor());
+            var clipboardModel = new ClipboardModel(new Clipboard());
             var clipboardHistoryModel = new ClipboardHistoryModel(10);
             var clipboardBindingsModel = new ClipboardBindingsModel();
             var keyTracker = new KeyTracker();

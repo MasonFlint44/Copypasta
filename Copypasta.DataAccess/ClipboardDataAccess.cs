@@ -11,8 +11,8 @@ namespace Copypasta.DataAccess
 
         public IDataObject ClipboardData
         {
-            get => System.Windows.Clipboard.GetDataObject().CopyToDataObject();
-            set => System.Windows.Clipboard.SetDataObject(value, PersistClipboardData);
+            get => Clipboard.GetDataObject().Clone();
+            set => Clipboard.SetDataObject(value, PersistClipboardData);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Copypasta.Views
         public HistoryMenu()
         {
             DataContextChanged += OnDataContextChanged;
-            // Set DataContext to prevent inheriting parent's DataContext
+            // SetClipboardData DataContext to prevent inheriting parent's DataContext
             DataContext = null;
             InitializeComponent();
         }

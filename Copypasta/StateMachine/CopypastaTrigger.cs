@@ -10,7 +10,6 @@
         EscPressed,
         Timeout,
         ClipboardBound,
-        NoDataOnKey,
-        SavedDataToClipboard
+        NoDataOnKey
     }
 }

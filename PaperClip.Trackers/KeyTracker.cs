@@ -71,7 +71,7 @@ namespace PaperClip.Trackers
                 Key = e.Key,
                 IsModifier = isModifier
             };
-            KeyPressed?.Invoke(this, args);
+             KeyPressed?.Invoke(this, args);
 
             e.Handled = args.Handled;
         }

@@ -161,10 +161,6 @@
       <Project>{14B2A0D4-B2B7-49E8-93D3-498FC93C6898}</Project>
       <Name>PaperClip.Collections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Copypasta.DataAccess\Copypasta.DataAccess.csproj">
-      <Project>{943C42F7-2260-42A6-9839-C96FB776F7A6}</Project>
-      <Name>Copypasta.DataAccess</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PaperClip.Trackers\PaperClip.Trackers.csproj">
       <Project>{6F345E5A-A37E-477E-918A-3045E3E214CA}</Project>
       <Name>PaperClip.Trackers</Name>

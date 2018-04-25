@@ -35,6 +35,9 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,12 +47,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clipboard.cs" />
+    <Compile Include="Helpers\ClipboardFormatsEnumerator.cs" />
+    <Compile Include="Helpers\ClipboardFormatsEnumerable.cs" />
+    <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="ClipboardMonitor.cs" />
     <Compile Include="ClipboardUpdatedEventArgs.cs" />
+    <Compile Include="Interfaces\IClipboard.cs" />
     <Compile Include="Interfaces\IClipboardMonitor.cs" />
     <Compile Include="Interfaces\IClipboardUpdatedEventArgs.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PaperClip.Collections\PaperClip.Collections.csproj">
+      <Project>{14B2A0D4-B2B7-49E8-93D3-498FC93C6898}</Project>
+      <Name>PaperClip.Collections</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

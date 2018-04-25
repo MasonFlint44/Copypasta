@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperClip.Trackers", "Paper
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperClip.Hooks", "PaperClip.Hooks\PaperClip.Hooks.csproj", "{03284F36-5671-4799-9658-2B87A32F98D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Copypasta.DataAccess", "Copypasta.DataAccess\Copypasta.DataAccess.csproj", "{943C42F7-2260-42A6-9839-C96FB776F7A6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperClip.Collections.Tests", "PaperClip.Collections.Tests\PaperClip.Collections.Tests.csproj", "{0C786A81-F389-4B71-8C73-172564CBA668}"
 EndProject
 Global
@@ -49,10 +47,6 @@ Global
 		{03284F36-5671-4799-9658-2B87A32F98D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03284F36-5671-4799-9658-2B87A32F98D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03284F36-5671-4799-9658-2B87A32F98D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{943C42F7-2260-42A6-9839-C96FB776F7A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{943C42F7-2260-42A6-9839-C96FB776F7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{943C42F7-2260-42A6-9839-C96FB776F7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{943C42F7-2260-42A6-9839-C96FB776F7A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C786A81-F389-4B71-8C73-172564CBA668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C786A81-F389-4B71-8C73-172564CBA668}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C786A81-F389-4B71-8C73-172564CBA668}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Windows;
+using System.IO;
 using System.Windows.Input;
+using PaperClip.Collections.Interfaces;
 
 namespace Copypasta.Models.Interfaces
 {
@@ -9,7 +10,7 @@ namespace Copypasta.Models.Interfaces
         event EventHandler<IPropertyUpdatedEventArgs<Key>> KeyUpdated;
         Key Key { get; set; }
 
-        event EventHandler<IPropertyUpdatedEventArgs<IDataObject>> ClipboardDataUpdated;
-        IDataObject ClipboardData { get; set; }
+        event EventHandler<IPropertyUpdatedEventArgs<IOrderedDictionary<string, MemoryStream>>> ClipboardDataUpdated;
+        IOrderedDictionary<string, MemoryStream> ClipboardData { get; set; }
     }
 }

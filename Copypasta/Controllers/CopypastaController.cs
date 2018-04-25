@@ -24,9 +24,7 @@ namespace Copypasta.Controllers
         private readonly IInputSimulator _inputSimulator;
         private readonly INotificationViewModel _notificationViewModel;
         private readonly StateMachine<CopypastaState, CopypastaTrigger> _copypastaStateMachine;
-        private readonly StateMachine<ClipboardWriterState, ClipboardWriterTrigger> _clipboardWriterStateMachine;
         private readonly StateMachine<CopypastaState, CopypastaTrigger>.TriggerWithParameters<Key> _keyPressedTrigger;
-        private readonly StateMachine<ClipboardWriterState, ClipboardWriterTrigger>.TriggerWithParameters<IClipboardItemModel> _writingToClipboard;
 
         private IClipboardItemModel _clipboardSwap;
         private bool _ctrlVHandled;
@@ -49,13 +47,9 @@ namespace Copypasta.Controllers
             _inputSimulator = inputSimulator;
             _notificationViewModel = notificationViewModel;
             _copypastaStateMachine = new StateMachine<CopypastaState, CopypastaTrigger>(CopypastaState.Idle);
-            _clipboardWriterStateMachine = new StateMachine<ClipboardWriterState, ClipboardWriterTrigger>(ClipboardWriterState.Idle);
             _keyPressedTrigger = _copypastaStateMachine.SetTriggerParameters<Key>(CopypastaTrigger.KeyPressed);
-            _writingToClipboard =
-                _clipboardWriterStateMachine.SetTriggerParameters<IClipboardItemModel>(ClipboardWriterTrigger.Write);
 
             ConfigureCopypastaStateMachine();
-            ConfigureClipboardWriterStateMachine();
             ConfigureEventTriggers();
         }
 
@@ -65,7 +59,6 @@ namespace Copypasta.Controllers
             {
                 Console.WriteLine("ClipboardUpdated");
                 _copypastaStateMachine.Fire(CopypastaTrigger.ClipboardUpdated);
-                _clipboardWriterStateMachine.Fire(ClipboardWriterTrigger.ClipboardUpdated);
             };
             _notificationViewModel.NotificationTimeoutEvent += (sender, args) =>
             {
@@ -212,7 +205,7 @@ namespace Copypasta.Controllers
 
             _copypastaStateMachine.Configure(CopypastaState.MovingDataToClipboard)
                 .SubstateOf(CopypastaState.Pasting)
-                .Ignore(CopypastaTrigger.ClipboardUpdated)
+                .Permit(CopypastaTrigger.ClipboardUpdated, CopypastaState.SimulatingCtrlV)
                 .Ignore(CopypastaTrigger.CtrlCPressed)
                 .Ignore(CopypastaTrigger.CtrlVPressed)
                 .Ignore(CopypastaTrigger.EscPressed)
@@ -220,7 +213,6 @@ namespace Copypasta.Controllers
                 .Ignore(CopypastaTrigger.ModifierPressed)
                 .Ignore(CopypastaTrigger.Timeout)
                 .Permit(CopypastaTrigger.NoDataOnKey, CopypastaState.Idle)
-                .Permit(CopypastaTrigger.SavedDataToClipboard, CopypastaState.SimulatingCtrlV)
                 .OnEntryFrom(_keyPressedTrigger, key =>
                 {
                     _ctrlCHandled = true;
@@ -243,7 +235,7 @@ namespace Copypasta.Controllers
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
 
                     // Write to clipboard
-                    _clipboardWriterStateMachine.Fire(_writingToClipboard, clipboardItem);
+                    _clipboardModel.ClipboardData = clipboardItem;
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.SimulatingCtrlV)
@@ -269,21 +261,20 @@ namespace Copypasta.Controllers
                     _inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
 
                     // Wait for programs to paste data once Ctrl+V is pressed
-                    Thread.Sleep(10);
+                    Thread.Sleep(100);
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.RestoringClipboard)
                 .SubstateOf(CopypastaState.Pasting)
-                .Ignore(CopypastaTrigger.ClipboardUpdated)
+                .Permit(CopypastaTrigger.ClipboardUpdated, CopypastaState.Idle)
                 .Ignore(CopypastaTrigger.CtrlCPressed)
                 .Permit(CopypastaTrigger.CtrlVPressed, CopypastaState.Pasting)
                 .Ignore(CopypastaTrigger.EscPressed)
                 .Ignore(CopypastaTrigger.KeyPressed)
                 .Ignore(CopypastaTrigger.ModifierPressed)
                 .Ignore(CopypastaTrigger.Timeout)
-                .Permit(CopypastaTrigger.SavedDataToClipboard, CopypastaState.Idle)
                 .OnEntry(() =>
                 {
                     _ctrlCHandled = false;
@@ -295,29 +286,7 @@ namespace Copypasta.Controllers
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
 
                     // Restore clipboard data
-                    _clipboardWriterStateMachine.Fire(_writingToClipboard, _clipboardSwap);
-                });
-        }
-
-        private void ConfigureClipboardWriterStateMachine()
-        {
-            _clipboardWriterStateMachine.Configure(ClipboardWriterState.Idle)
-                .Permit(ClipboardWriterTrigger.Write, ClipboardWriterState.ClearingClipboard)
-                .Ignore(ClipboardWriterTrigger.ClipboardUpdated);
-
-            _clipboardWriterStateMachine.Configure(ClipboardWriterState.ClearingClipboard)
-                .Permit(ClipboardWriterTrigger.ClipboardUpdated, ClipboardWriterState.WritingClipboard)
-                .OnEntryFrom(_writingToClipboard, clipboardItem =>
-                {
-                    Console.WriteLine($"Clipboard={clipboardItem.ClipboardData.GetData(typeof(string))}");
-                    _clipboardModel.ClipboardData = clipboardItem;
-                });
-
-            _clipboardWriterStateMachine.Configure(ClipboardWriterState.WritingClipboard)
-                .Permit(ClipboardWriterTrigger.ClipboardUpdated, ClipboardWriterState.Idle)
-                .OnExit(() =>
-                {
-                    _copypastaStateMachine.Fire(CopypastaTrigger.SavedDataToClipboard);
+                    _clipboardModel.ClipboardData = _clipboardSwap;
                 });
         }
     }
