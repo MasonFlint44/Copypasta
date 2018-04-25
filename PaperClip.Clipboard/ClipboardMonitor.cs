@@ -7,7 +7,7 @@ namespace PaperClip.Clipboard
 {
     public class ClipboardMonitor: IClipboardMonitor
     {
-        public event EventHandler<IClipboardUpdatedEventArgs> ClipboardUpdated;
+        public event EventHandler<ClipboardUpdatedEventArgs> ClipboardUpdated;
 
         private readonly Window _window;
         private readonly IntPtr _handle;

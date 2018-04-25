@@ -74,10 +74,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\CopypastaController.cs" />
-    <Compile Include="Models\Interfaces\IClipboardModel.cs" />
-    <Compile Include="Models\Interfaces\IPropertyUpdatedEventArgs%28T%29.cs" />
-    <Compile Include="Models\Interfaces\IPropertyUpdatedEventArgs.cs" />
-    <Compile Include="Models\PropertyUpdatedEventArgs%28T%29.cs" />
+    <Compile Include="Domain\Interfaces\IClipboard.cs" />
+    <Compile Include="PropertyUpdatedEventArgs%28T%29.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="StateMachine\ClipboardWriterState.cs" />
     <Compile Include="StateMachine\ClipboardWriterTrigger.cs" />
@@ -86,14 +84,14 @@
     <Compile Include="ViewModels\HistoryRecordViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IHistoryRecordViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\INotificationViewModel.cs" />
-    <Compile Include="Models\ClipboardBindingsModel.cs" />
-    <Compile Include="Models\ClipboardHistoryModel.cs" />
+    <Compile Include="Domain\ClipboardBindingManager.cs" />
+    <Compile Include="Domain\ClipboardHistoryManager.cs" />
     <Compile Include="Models\ClipboardItemModel.cs" />
-    <Compile Include="Models\ClipboardModel.cs" />
-    <Compile Include="Models\PropertyUpdatedEventArgs.cs" />
+    <Compile Include="Domain\Clipboard.cs" />
+    <Compile Include="PropertyUpdatedEventArgs.cs" />
     <Compile Include="Models\Interfaces\IClipboardItemModel.cs" />
-    <Compile Include="Models\Interfaces\IClipboardHistoryModel.cs" />
-    <Compile Include="Models\Interfaces\IClipboardBindingsModel.cs" />
+    <Compile Include="Domain\Interfaces\IClipboardHistoryManager.cs" />
+    <Compile Include="Domain\Interfaces\IClipboardBindingManager.cs" />
     <Compile Include="ViewModels\HistoryMenuViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IHistoryMenuViewModel.cs" />
     <Compile Include="ViewModels\NotificationViewModel.cs" />

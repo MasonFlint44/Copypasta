@@ -12,7 +12,6 @@ using PaperClip.Collections.Interfaces;
 
 namespace PaperClip.Clipboard
 {
-    // TODO: Clipboard does not support fetching data from sythesized clipboard formats after getting all available formats
     public class Clipboard : IClipboard
     {
         private readonly Window _window;
@@ -25,7 +24,7 @@ namespace PaperClip.Clipboard
         private OrderedDictionary<string, int> _formats;
         private bool _formatsCurrent;
 
-        public event EventHandler<IClipboardUpdatedEventArgs> ClipboardUpdated;
+        public event EventHandler<ClipboardUpdatedEventArgs> ClipboardUpdated;
 
         // Ordered by priority - Most descriptive format first
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -53,7 +52,7 @@ namespace PaperClip.Clipboard
             _clipboardMonitor.ClipboardUpdated += (sender, args) =>
             {
                 _formatsCurrent = false;
-                _clipboardData.Clear();
+                _clipboardData = new Dictionary<string, MemoryStream>();
                 ClipboardUpdated?.Invoke(this, args);
             };
 
@@ -63,7 +62,7 @@ namespace PaperClip.Clipboard
 
         public MemoryStream this[string format] => GetClipboardData(format);
 
-        // TODO: Need to add support for delayed rendering in case null is passed in
+        // TODO: Need to add support for delayed rendering
         public void SetClipboardData(IOrderedDictionary<string, MemoryStream> data)
         {
             try
@@ -100,65 +99,16 @@ namespace PaperClip.Clipboard
             }
         }
 
-        //public void SetClipboardData(OrderedDictionary<string, object> data)
-        //{
-        //    var formatter = new BinaryFormatter();
-        //    var clipboardData = new OrderedDictionary<string, MemoryStream>();
-        //    foreach (var format in data)
-        //    {
-        //        if (format.Value == null)
-        //        {
-        //            clipboardData[format.Key] = null;
-        //            break;
-        //        }
-                
-        //        if (format.Value is MemoryStream stream)
-        //        {
-        //            clipboardData[format.Key] = stream;
-        //            break;
-        //        }
-
-        //        // Serialize data
-        //        stream = new MemoryStream();
-        //        formatter.Serialize(stream, format.Value);
-
-        //        clipboardData[format.Key] = stream;
-        //    }
-        //    SetClipboardData(clipboardData);
-        //}
-
         public bool ContainsFormat(string format)
         {
             if (!_formatsCurrent) { GetClipboardFormats(); }
             return _formats.ContainsKey(format.ToLower());
         }
 
-        private void GetClipboardFormats()
-        {
-            var formats = new OrderedDictionary<string, int>();
-            foreach (var format in _clipboardFormatsEnumerable)
-            {
-                formats[format.Name.ToLower()] = format.Id;
-            }
-
-            // Get synthesized formats
-            var synthesizedFormats = formats.Keys.SelectMany(formatName => _clipboardHelper.GetSynthesizedFormats(formatName));
-            foreach (var synthesizedFormat in synthesizedFormats)
-            {
-                var lowerSynthFormatName = synthesizedFormat.Name.ToLower();
-                if (!formats.ContainsKey(lowerSynthFormatName))
-                {
-                    formats[lowerSynthFormatName] = synthesizedFormat.Id;
-                }
-            }
-
-            _formats = formats;
-            _formatsCurrent = true;
-        }
-
         public MemoryStream GetClipboardData(string format)
         {
             if (!_formatsCurrent) { GetClipboardFormats(); }
+
             var lowerFormat = format.ToLower();
             if (!_formats.ContainsKey(lowerFormat))
             {
@@ -184,6 +134,7 @@ namespace PaperClip.Clipboard
         public OrderedDictionary<string, MemoryStream> GetClipboardData()
         {
             if (!_formatsCurrent) { GetClipboardFormats(); }
+
             var clipboardData = new OrderedDictionary<string, MemoryStream>();
             try
             {
@@ -213,6 +164,29 @@ namespace PaperClip.Clipboard
             _clipboardData = clipboardData;
 
             return clipboardData;
+        }
+
+        private void GetClipboardFormats()
+        {
+            var formats = new OrderedDictionary<string, int>();
+            foreach (var format in _clipboardFormatsEnumerable)
+            {
+                formats[format.Name.ToLower()] = format.Id;
+            }
+
+            // Include synthesized formats
+            var synthesizedFormats = formats.Keys.SelectMany(formatName => _clipboardHelper.GetSynthesizedFormats(formatName));
+            foreach (var synthesizedFormat in synthesizedFormats)
+            {
+                var lowerSynthFormatName = synthesizedFormat.Name.ToLower();
+                if (!formats.ContainsKey(lowerSynthFormatName))
+                {
+                    formats[lowerSynthFormatName] = synthesizedFormat.Id;
+                }
+            }
+
+            _formats = formats;
+            _formatsCurrent = true;
         }
     }
 }

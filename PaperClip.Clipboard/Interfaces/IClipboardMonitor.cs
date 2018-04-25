@@ -4,6 +4,6 @@ namespace PaperClip.Clipboard.Interfaces
 {
     public interface IClipboardMonitor
     {
-        event EventHandler<IClipboardUpdatedEventArgs> ClipboardUpdated;
+        event EventHandler<ClipboardUpdatedEventArgs> ClipboardUpdated;
     }
 }

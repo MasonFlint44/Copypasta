@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Copypasta.Models.Interfaces;
+using System;
 using System.Windows.Input;
 
-namespace Copypasta.Models.Interfaces
+namespace Copypasta.Domain.Interfaces
 {
-    public interface IClipboardBindingsModel
+    public interface IClipboardBindingManager
     {
         event EventHandler BindingAdded;
         void AddBinding(IClipboardItemModel clipboardItem);

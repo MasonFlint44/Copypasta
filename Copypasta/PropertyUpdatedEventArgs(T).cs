@@ -1,9 +1,8 @@
 ﻿using System;
-using Copypasta.Models.Interfaces;
 
-namespace Copypasta.Models
+namespace Copypasta
 {
-    public class PropertyUpdatedEventArgs<T>: EventArgs, IPropertyUpdatedEventArgs<T>
+    public class PropertyUpdatedEventArgs<T>: EventArgs
     {
         public T OldValue { get; }
         public T NewValue { get; }

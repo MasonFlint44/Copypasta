@@ -1,14 +1,15 @@
-﻿using Copypasta.Models.Interfaces;
+﻿using Copypasta.Domain.Interfaces;
+using Copypasta.Models.Interfaces;
 using PaperClip.Collections;
 using PaperClip.Collections.Interfaces;
 
-namespace Copypasta.Models
+namespace Copypasta.Domain
 {
-    public class ClipboardHistoryModel: IClipboardHistoryModel
+    public class ClipboardHistoryManager: IClipboardHistoryManager
     {
         public ICircularList<IClipboardItemModel> History { get; }
 
-        public ClipboardHistoryModel(int historyCount)
+        public ClipboardHistoryManager(int historyCount)
         {
             History = new CircularList<IClipboardItemModel>(historyCount);
         }

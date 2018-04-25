@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Copypasta.Domain.Interfaces;
 using Copypasta.Models.Interfaces;
 
-namespace Copypasta.Models
+namespace Copypasta.Domain
 {
-    public class ClipboardBindingsModel: IClipboardBindingsModel
+    public class ClipboardBindingManager: IClipboardBindingManager
     {
         private readonly IDictionary<Key, IClipboardItemModel> _clipboardBindings = new Dictionary<Key, IClipboardItemModel>();
 
@@ -19,11 +20,8 @@ namespace Copypasta.Models
 
         public IClipboardItemModel GetData(Key key)
         {
-            if(_clipboardBindings.TryGetValue(key, out var clipboardItem))
-            {
-                return clipboardItem;
-            }
-            return null;
+            if(!_clipboardBindings.TryGetValue(key, out var clipboardItem)) { return null; }
+            return clipboardItem;
         }
     }
 }

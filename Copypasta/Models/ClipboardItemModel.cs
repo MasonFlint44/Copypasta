@@ -9,7 +9,7 @@ namespace Copypasta.Models
     public class ClipboardItemModel: IClipboardItemModel
     {
         private Key _key;
-        public event EventHandler<IPropertyUpdatedEventArgs<Key>> KeyUpdated;
+        public event EventHandler<PropertyUpdatedEventArgs<Key>> KeyUpdated;
         public Key Key
         {
             get => _key;
@@ -22,7 +22,7 @@ namespace Copypasta.Models
         }
 
         private IOrderedDictionary<string, MemoryStream> _clipboardData;
-        public event EventHandler<IPropertyUpdatedEventArgs<IOrderedDictionary<string, MemoryStream>>> ClipboardDataUpdated;
+        public event EventHandler<PropertyUpdatedEventArgs<IOrderedDictionary<string, MemoryStream>>> ClipboardDataUpdated;
         public IOrderedDictionary<string, MemoryStream> ClipboardData
         {
             get => _clipboardData;

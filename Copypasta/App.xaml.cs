@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using WindowsInput;
 using Copypasta.Controllers;
-using Copypasta.Models;
+using Copypasta.Domain;
 using Copypasta.ViewModels;
 using Copypasta.Views;
 using PaperClip.Hotkeys;
@@ -18,17 +18,17 @@ namespace Copypasta
     {
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            var clipboardModel = new ClipboardModel(new Clipboard());
-            var clipboardHistoryModel = new ClipboardHistoryModel(10);
-            var clipboardBindingsModel = new ClipboardBindingsModel();
+            var clipboard = new Domain.Clipboard(new Clipboard());
+            var clipboardHistoryManager = new ClipboardHistoryManager(10);
+            var clipboardBindingManager = new ClipboardBindingManager();
             var keyTracker = new KeyTracker();
             var ctrlCHotkey = new Hotkey(keyTracker, new KeyCombo(ModifierKeys.Control, Key.C));
             var ctrlVHotkey = new Hotkey(keyTracker, new KeyCombo(ModifierKeys.Control, Key.V));
             var escHotkey = new Hotkey(keyTracker, new KeyCombo(Key.Escape));
             var inputSimulator = new InputSimulator();
             var notificationViewModel = new NotificationViewModel();
-            var historyMenuViewModel = new HistoryMenuViewModel(clipboardHistoryModel);
-            var copypasta = new CopypastaController(clipboardModel, clipboardHistoryModel, clipboardBindingsModel,
+            var historyMenuViewModel = new HistoryMenuViewModel(clipboardHistoryManager);
+            var copypasta = new CopypastaController(clipboard, clipboardHistoryManager, clipboardBindingManager,
                 ctrlVHotkey, ctrlCHotkey, escHotkey, keyTracker, inputSimulator, notificationViewModel);
             var notifyIconWindow = new NotifyIconWindow(notificationViewModel, historyMenuViewModel);
         }

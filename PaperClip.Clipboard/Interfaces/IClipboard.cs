@@ -12,12 +12,11 @@ namespace PaperClip.Clipboard.Interfaces
 
         IEnumerable<string> Formats { get; }
 
-        event EventHandler<IClipboardUpdatedEventArgs> ClipboardUpdated;
+        event EventHandler<ClipboardUpdatedEventArgs> ClipboardUpdated;
 
         bool ContainsFormat(string format);
         OrderedDictionary<string, MemoryStream> GetClipboardData();
         MemoryStream GetClipboardData(string format);
         void SetClipboardData(IOrderedDictionary<string, MemoryStream> data);
-        //void SetClipboardData(OrderedDictionary<string, object> data);
     }
 }

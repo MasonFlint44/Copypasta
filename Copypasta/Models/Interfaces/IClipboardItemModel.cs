@@ -7,10 +7,10 @@ namespace Copypasta.Models.Interfaces
 {
     public interface IClipboardItemModel
     {
-        event EventHandler<IPropertyUpdatedEventArgs<Key>> KeyUpdated;
+        event EventHandler<PropertyUpdatedEventArgs<Key>> KeyUpdated;
         Key Key { get; set; }
 
-        event EventHandler<IPropertyUpdatedEventArgs<IOrderedDictionary<string, MemoryStream>>> ClipboardDataUpdated;
+        event EventHandler<PropertyUpdatedEventArgs<IOrderedDictionary<string, MemoryStream>>> ClipboardDataUpdated;
         IOrderedDictionary<string, MemoryStream> ClipboardData { get; set; }
     }
 }
