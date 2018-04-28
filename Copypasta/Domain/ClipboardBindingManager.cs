@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using Copypasta.Domain.Interfaces;
-using Copypasta.Models.Interfaces;
+using Copypasta.Domain.Notifications;
+using Copypasta.Models;
+using PaperClip.Reactive;
 
 namespace Copypasta.Domain
 {
-    public class ClipboardBindingManager: IClipboardBindingManager
+    public class ClipboardBindingManager: Subscription<ClipboardBindingNotification>, IClipboardBindingManager
     {
-        private readonly IDictionary<Key, IClipboardItemModel> _clipboardBindings = new Dictionary<Key, IClipboardItemModel>();
+        private readonly IDictionary<Key, ClipboardDataModel> _clipboardBindings = new Dictionary<Key, ClipboardDataModel>();
 
-        public event EventHandler BindingAdded;
-
-        public void AddBinding(IClipboardItemModel clipboardItem)
+        public void AddBinding(Key key, ClipboardDataModel clipboardData)
         {
-            _clipboardBindings[clipboardItem.Key] = clipboardItem;
-            BindingAdded?.Invoke(this, EventArgs.Empty);
+            _clipboardBindings[key] = clipboardData;
+
+            foreach (var observer in Subscribers)
+            {
+                observer.OnNext(new ClipboardBindingNotification(key, clipboardData));
+            }
         }
 
-        public IClipboardItemModel GetData(Key key)
+        public ClipboardDataModel GetBindingData(Key key)
         {
             if(!_clipboardBindings.TryGetValue(key, out var clipboardItem)) { return null; }
             return clipboardItem;

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Copypasta.Annotations;
@@ -8,7 +8,7 @@ namespace Copypasta.ViewModels.Designer
 {
     public class DesignerHistoryMenuViewModel: IHistoryMenuViewModel
     {
-        public List<IHistoryRecordViewModel> HistoryList { get; } = new List<IHistoryRecordViewModel>();
+        public ObservableCollection<IHistoryRecordViewModel> HistoryList { get; } = new ObservableCollection<IHistoryRecordViewModel>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

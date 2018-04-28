@@ -1,39 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Copypasta.Annotations;
 using Copypasta.Domain.Interfaces;
+using Copypasta.Models;
 using Copypasta.ViewModels.Interfaces;
-using PaperClip.Collections;
-using PaperClip.Collections.Interfaces;
 
 namespace Copypasta.ViewModels
 {
     public class HistoryMenuViewModel: IHistoryMenuViewModel
     {
         private readonly IClipboardHistoryManager _clipboardHistoryManager;
+        private readonly Dictionary<HistoryRecordModel, HistoryRecordViewModel> _modelToViewModelMappings;
 
-        private readonly ICircularList<IHistoryRecordViewModel> _historyList;
-        public List<IHistoryRecordViewModel> HistoryList => _historyList.ToList();
+        public ObservableCollection<IHistoryRecordViewModel> HistoryList { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public HistoryMenuViewModel(IClipboardHistoryManager clipboardHistoryManager)
         {
             _clipboardHistoryManager = clipboardHistoryManager;
-
-            _clipboardHistoryManager.History.ListUpdated += (sender, args) =>
+            _modelToViewModelMappings = new Dictionary<HistoryRecordModel, HistoryRecordViewModel>(_clipboardHistoryManager.RecordCount);
+            HistoryList = new ObservableCollection<IHistoryRecordViewModel>();
+            
+            _clipboardHistoryManager.Subscribe(notification =>
             {
-                _historyList.Add(new HistoryRecordViewModel(args.AddedElement));
+                if (notification.WasRecordRemoved)
+                {
+                    var removedRecord = _modelToViewModelMappings[notification.RemovedRecord];
+                    _modelToViewModelMappings.Remove(notification.RemovedRecord);
+                    HistoryList.Remove(removedRecord);
+                }
+
+                var addedRecord = new HistoryRecordViewModel(notification.AddedRecord);
+                _modelToViewModelMappings[notification.AddedRecord] = addedRecord;
+                HistoryList.Add(addedRecord);
+
                 OnPropertyChanged(nameof(HistoryList));
-            };
-
-            _historyList = new CircularList<IHistoryRecordViewModel>(_clipboardHistoryManager.History.Size);
-            foreach (var item in _clipboardHistoryManager.History)
-            {
-                _historyList.Add(new HistoryRecordViewModel(item));
-            }
+            });
         }
 
         [NotifyPropertyChangedInvocator]

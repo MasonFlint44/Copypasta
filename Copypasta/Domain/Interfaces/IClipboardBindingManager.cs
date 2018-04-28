@@ -1,13 +1,13 @@
-﻿using Copypasta.Models.Interfaces;
-using System;
+﻿using System;
 using System.Windows.Input;
+using Copypasta.Domain.Notifications;
+using Copypasta.Models;
 
 namespace Copypasta.Domain.Interfaces
 {
-    public interface IClipboardBindingManager
+    public interface IClipboardBindingManager: IObservable<ClipboardBindingNotification>
     {
-        event EventHandler BindingAdded;
-        void AddBinding(IClipboardItemModel clipboardItem);
-        IClipboardItemModel GetData(Key key);
+        void AddBinding(Key key, ClipboardDataModel clipboardItem);
+        ClipboardDataModel GetBindingData(Key key);
     }
 }

@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperClip.Hooks", "PaperCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperClip.Collections.Tests", "PaperClip.Collections.Tests\PaperClip.Collections.Tests.csproj", "{0C786A81-F389-4B71-8C73-172564CBA668}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperClip.Reactive", "PaperClip.Reactive\PaperClip.Reactive.csproj", "{042BD52D-8150-4AA9-9AC8-E20376DCFE52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{0C786A81-F389-4B71-8C73-172564CBA668}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C786A81-F389-4B71-8C73-172564CBA668}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C786A81-F389-4B71-8C73-172564CBA668}.Release|Any CPU.Build.0 = Release|Any CPU
+		{042BD52D-8150-4AA9-9AC8-E20376DCFE52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{042BD52D-8150-4AA9-9AC8-E20376DCFE52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{042BD52D-8150-4AA9-9AC8-E20376DCFE52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{042BD52D-8150-4AA9-9AC8-E20376DCFE52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

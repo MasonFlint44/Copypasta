@@ -16,15 +16,14 @@
                    Content="History"/>
             <Border BorderBrush="#7F7F7F"
                     BorderThickness="0 1 0 0" 
-                    Visibility="{Binding HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}}">
+                    Visibility="{Binding Path=HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                 <TextBlock Padding="5" 
                            Foreground="White"
-                           Visibility="{Binding HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}}">
-                    Empty
-                </TextBlock>
+                           Visibility="{Binding Path=HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"
+                           Text="Empty"/>
             </Border>
             <ItemsControl x:Name="HistoryPanel"
-                          ItemsSource="{Binding HistoryList}">
+                          ItemsSource="{Binding Path=HistoryList, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -32,7 +31,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:HistoryRecord DataContext="{Binding}"/>
+                        <local:HistoryRecord DataContext="{Binding UpdateSourceTrigger=PropertyChanged}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

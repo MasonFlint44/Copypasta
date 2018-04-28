@@ -46,18 +46,25 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.PlatformServices.3.1.1\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CircularListTests\AddShould.cs" />
-    <Compile Include="CircularListTests\ClearShould.cs" />
-    <Compile Include="CircularListTests\ContainsShould.cs" />
-    <Compile Include="CircularListTests\CountShould.cs" />
-    <Compile Include="CircularListTests\EnumeratorShould.cs" />
-    <Compile Include="CircularListTests\FirstShould.cs" />
-    <Compile Include="CircularListTests\IndexerShould.cs" />
-    <Compile Include="CircularListTests\IndexOfShould.cs" />
-    <Compile Include="CircularListTests\LastShould.cs" />
-    <Compile Include="CircularListTests\ListUpdatedShould.cs" />
     <Compile Include="OrderedDictionaryTests\AddShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,8 +73,13 @@
       <Project>{14B2A0D4-B2B7-49E8-93D3-498FC93C6898}</Project>
       <Name>PaperClip.Collections</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PaperClip.Reactive\PaperClip.Reactive.csproj">
+      <Project>{042BD52D-8150-4AA9-9AC8-E20376DCFE52}</Project>
+      <Name>PaperClip.Reactive</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

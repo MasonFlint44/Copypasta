@@ -4,7 +4,7 @@ using System.Windows.Input;
 using WindowsInput;
 using WindowsInput.Native;
 using Copypasta.Domain.Interfaces;
-using Copypasta.Models.Interfaces;
+using Copypasta.Models;
 using Copypasta.StateMachine;
 using Copypasta.ViewModels.Interfaces;
 using PaperClip.Hotkeys.Interfaces;
@@ -27,7 +27,8 @@ namespace Copypasta.Controllers
         private readonly StateMachine<CopypastaState, CopypastaTrigger> _copypastaStateMachine;
         private readonly StateMachine<CopypastaState, CopypastaTrigger>.TriggerWithParameters<Key> _keyPressedTrigger;
 
-        private IClipboardItemModel _clipboardSwap;
+        private ClipboardDataModel _clipboardSwap;
+        private HistoryRecordModel _historyRecordSwap;
         private bool _ctrlVHandled;
         private bool _ctrlCHandled;
         private bool _keyPressHandled;
@@ -56,11 +57,11 @@ namespace Copypasta.Controllers
 
         private void ConfigureEventTriggers()
         {
-            _clipboard.ClipboardUpdated += (sender, args) =>
+            _clipboard.Subscribe(notification =>
             {
                 Console.WriteLine("ClipboardUpdated");
                 _copypastaStateMachine.Fire(CopypastaTrigger.ClipboardUpdated);
-            };
+            });
             _notificationViewModel.NotificationTimeoutEvent += (sender, args) =>
             {
                 Console.WriteLine("NotificationTimeout");
@@ -102,11 +103,11 @@ namespace Copypasta.Controllers
                 args.Handled = _escPressHandled;
                 _copypastaStateMachine.Fire(CopypastaTrigger.EscPressed);
             };
-            _clipboardBindingManager.BindingAdded += (sender, args) =>
+            _clipboardBindingManager.Subscribe(clipboardItem =>
             {
                 Console.WriteLine("BindingAdded");
                 _copypastaStateMachine.Fire(CopypastaTrigger.ClipboardBound);
-            };
+            });
         }
 
         private void ConfigureCopypastaStateMachine()
@@ -149,8 +150,8 @@ namespace Copypasta.Controllers
                     _modifierPressHandled = false;
 
                     // Update clipboard history
-                    var clipboardItem = _clipboard.ClipboardData;
-                    _clipboardHistoryManager.History.Add(clipboardItem);
+                    var clipboardData = _clipboard.ClipboardData;
+                    _historyRecordSwap = _clipboardHistoryManager.AddHistoryRecord(Key.None, clipboardData);
 
                     _notificationViewModel.ShowNotification(CopypastaState.Copying);
 
@@ -176,9 +177,10 @@ namespace Copypasta.Controllers
                     _modifierPressHandled = false;
 
                     // Bind clipboard to key
-                    var clipboardItem = _clipboardHistoryManager.History[0];
-                    clipboardItem.Key = key;
-                    _clipboardBindingManager.AddBinding(clipboardItem);
+                    _clipboardBindingManager.AddBinding(key, _historyRecordSwap.ClipboardData);
+
+                    // Update clipboard history
+                    _historyRecordSwap.Key = key;
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
                 });
@@ -222,7 +224,7 @@ namespace Copypasta.Controllers
                     _keyPressHandled = false;
                     _modifierPressHandled = false;
 
-                    var clipboardItem = _clipboardBindingManager.GetData(key);
+                    var clipboardItem = _clipboardBindingManager.GetBindingData(key);
 
                     if (clipboardItem == null)
                     {
@@ -230,7 +232,7 @@ namespace Copypasta.Controllers
                         return;
                     }
 
-                    // Save clipboard to swap - to be restored
+                    // Save clipboard to swap - to restore previous data
                     _clipboardSwap = _clipboard.ClipboardData;
 
                     // Write to clipboard
@@ -285,7 +287,7 @@ namespace Copypasta.Controllers
                     _keyPressHandled = false;
                     _modifierPressHandled = false;
 
-                    // Restore clipboard data
+                    // Restore previous data
                     _clipboard.ClipboardData = _clipboardSwap;
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");

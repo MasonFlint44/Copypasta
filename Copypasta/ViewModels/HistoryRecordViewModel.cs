@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using Copypasta.Annotations;
-using Copypasta.Models.Interfaces;
+using Copypasta.Models;
 using Copypasta.ViewModels.Interfaces;
-using PaperClip.Collections.Interfaces;
 
 namespace Copypasta.ViewModels
 {
@@ -37,18 +35,21 @@ namespace Copypasta.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public HistoryRecordViewModel(IClipboardItemModel clipboardItem)
+        public HistoryRecordViewModel(HistoryRecordModel historyRecord)
         {
-            Key = clipboardItem.Key.ToString();
-            ClipboardText = GetText(clipboardItem.ClipboardData);
-
-            clipboardItem.KeyUpdated += (sender, args) => Key = clipboardItem.Key.ToString();
-            clipboardItem.ClipboardDataUpdated += (sender, args) => ClipboardText = GetText(args.NewValue);
+            historyRecord.Subscribe(notification =>
+            {
+                Key = notification.Key.ToString();
+                ClipboardText = GetText(notification.ClipboardData);
+            });
         }
 
-        public static string GetText(IOrderedDictionary<string, MemoryStream> clipboardData)
+        public static string GetText(ClipboardDataModel clipboardData)
         {
-            if (!clipboardData.TryGetValue(DataFormats.UnicodeText.ToLower(), out var stream)) { return string.Empty; }
+            if (!clipboardData.ClipboardData.TryGetValue(DataFormats.UnicodeText.ToLower(), out var stream))
+            {
+                return string.Empty;
+            }
             return Encoding.Unicode.GetString(stream.ToArray()).TrimEnd('\0');
         }
 

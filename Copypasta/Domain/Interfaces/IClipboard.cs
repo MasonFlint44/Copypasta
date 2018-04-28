@@ -1,11 +1,11 @@
 ﻿using System;
-using Copypasta.Models.Interfaces;
+using Copypasta.Domain.Notifications;
+using Copypasta.Models;
 
 namespace Copypasta.Domain.Interfaces
 {
-    public interface IClipboard
+    public interface IClipboard: IObservable<ClipboardNotification>
     {
-        event EventHandler<PropertyUpdatedEventArgs> ClipboardUpdated;
-        IClipboardItemModel ClipboardData { get; set; }
+        ClipboardDataModel ClipboardData { get; set; }
     }
 }

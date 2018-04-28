@@ -1,26 +1,29 @@
-﻿using System;
-using System.Windows.Input;
+﻿using Copypasta.Domain.Notifications;
 using Copypasta.Models;
-using Copypasta.Models.Interfaces;
-using IClipboard = Copypasta.Domain.Interfaces.IClipboard;
+using IClipboardDataAccess = Copypasta.Domain.Interfaces.IClipboard;
+using PaperClip.Reactive;
 
 namespace Copypasta.Domain
 {
-    public class Clipboard: IClipboard
+    public class Clipboard: Subscription<ClipboardNotification>, IClipboardDataAccess
     {
         private readonly PaperClip.Clipboard.Interfaces.IClipboard _clipboard;
 
         public Clipboard(PaperClip.Clipboard.Interfaces.IClipboard clipboard)
         {
             _clipboard = clipboard;
-            _clipboard.ClipboardUpdated += (sender, args) => ClipboardUpdated?.Invoke(this, new PropertyUpdatedEventArgs());
+            _clipboard.ClipboardUpdated += (sender, args) =>
+            {
+                foreach (var observer in Subscribers)
+                {
+                    observer.OnNext(new ClipboardNotification());
+                }
+            };
         }
 
-        public event EventHandler<PropertyUpdatedEventArgs> ClipboardUpdated; 
-
-        public IClipboardItemModel ClipboardData
+        public ClipboardDataModel ClipboardData
         {
-            get => new ClipboardItemModel(Key.None, _clipboard.GetClipboardData());
+            get => new ClipboardDataModel(_clipboard.GetClipboardData());
             set => _clipboard.SetClipboardData(value.ClipboardData);
         }
     }
