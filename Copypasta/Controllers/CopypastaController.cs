@@ -23,6 +23,7 @@ namespace Copypasta.Controllers
         private readonly IHotkey _escHotkey;
         private readonly IKeyTracker _keyTracker;
         private readonly IInputSimulator _inputSimulator;
+        private readonly INotificationDispatcher _notificationDispatcher;
         private readonly StateMachine<CopypastaState, CopypastaTrigger> _copypastaStateMachine;
         private readonly StateMachine<CopypastaState, CopypastaTrigger>.TriggerWithParameters<Key> _keyPressedTrigger;
 
@@ -36,6 +37,7 @@ namespace Copypasta.Controllers
 
         public CopypastaController(IClipboard clipboard, IClipboardHistoryManager clipboardHistoryManager,
             IClipboardBindingManager clipboardBindingManager, IHotkey ctrlVHotkey, IHotkey ctrlCHotkey, IHotkey escHotkey,
+            IKeyTracker keyTracker, IInputSimulator inputSimulator, INotificationDispatcher notificationDispatcher)
         {
             _clipboard = clipboard;
             _clipboardHistoryManager = clipboardHistoryManager;
