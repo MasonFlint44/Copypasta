@@ -13,7 +13,7 @@
     <tb:TaskbarIcon x:Name="NotifyIcon"
                     Visibility="Visible"
                     ToolTipText="Copypasta"
-                    IconSource="./NotifyIcon.ico"
+                    IconSource="../Resources/NotifyIcon.ico"
                     PopupActivation="All">
         <tb:TaskbarIcon.TrayPopup>
             <local:HistoryMenu x:Name="HistoryMenu"/>

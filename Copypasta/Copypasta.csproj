@@ -68,6 +68,7 @@
       <HintPath>..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -90,21 +91,32 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\CopypastaController.cs" />
+    <Compile Include="Domain\Interfaces\INotificationDispatcher.cs" />
     <Compile Include="Domain\Interfaces\IClipboard.cs" />
+    <Compile Include="Domain\NotificationDispatcher.cs" />
     <Compile Include="Domain\Notifications\ClipboardBindingNotification.cs" />
+    <Compile Include="Domain\Notifications\NotificationDispatcherNotification.cs" />
+    <Compile Include="Models\CopyingNotificationModel.cs" />
+    <Compile Include="Models\Interfaces\IBoundNotificationModel.cs" />
+    <Compile Include="Models\Interfaces\IHistoryRecordModel.cs" />
+    <Compile Include="Models\Interfaces\IClipboardDataModel.cs" />
+    <Compile Include="Models\BoundNotificationModel.cs" />
+    <Compile Include="Models\Interfaces\ISimpleNotificationModel.cs" />
+    <Compile Include="Models\Notifications\BoundNotification.cs" />
     <Compile Include="Models\Notifications\HistoryRecordNotification.cs" />
     <Compile Include="Domain\Notifications\ClipboardHistoryNotification.cs" />
     <Compile Include="Domain\Notifications\ClipboardNotification.cs" />
     <Compile Include="Models\ClipboardDataModel.cs" />
     <Compile Include="Models\HistoryRecordModel.cs" />
+    <Compile Include="Models\PastingNotificationModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="StateMachine\ClipboardWriterState.cs" />
-    <Compile Include="StateMachine\ClipboardWriterTrigger.cs" />
+    <Compile Include="ViewModels\Helpers\RelayCommand.cs" />
     <Compile Include="ViewModels\Designer\DesignerHistoryMenuViewModel.cs" />
     <Compile Include="ViewModels\Designer\DesignerHistoryRecordViewModel.cs" />
+    <Compile Include="ViewModels\Designer\DesignerNotificationBalloonViewModel.cs" />
     <Compile Include="ViewModels\HistoryRecordViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\INotificationBalloonViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IHistoryRecordViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\INotificationViewModel.cs" />
     <Compile Include="Domain\ClipboardBindingManager.cs" />
     <Compile Include="Domain\ClipboardHistoryManager.cs" />
     <Compile Include="Domain\Clipboard.cs" />
@@ -112,7 +124,13 @@
     <Compile Include="Domain\Interfaces\IClipboardBindingManager.cs" />
     <Compile Include="ViewModels\HistoryMenuViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IHistoryMenuViewModel.cs" />
-    <Compile Include="ViewModels\NotificationViewModel.cs" />
+    <Compile Include="ViewModels\NotificationBalloonViewModel.cs" />
+    <Compile Include="Views\Helpers\EmptyListToCollapsedVisibilityConverter.cs" />
+    <Compile Include="Views\Helpers\EmptyListToVisibleVisibilityConverter.cs" />
+    <Compile Include="Views\Helpers\ImageToImageSourceConverter.cs" />
+    <Compile Include="Views\NotificationBalloon.xaml.cs">
+      <DependentUpon>NotificationBalloon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NotifyIconWindow.xaml.cs">
       <DependentUpon>NotifyIconWindow.xaml</DependentUpon>
     </Compile>
@@ -126,6 +144,10 @@
       <DependentUpon>HistoryRecord.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\HistoryMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotificationBalloon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,7 +200,7 @@
       <Name>PaperClip.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="..\PaperClip.Reactive\PaperClip.Reactive.csproj">
-      <Project>{042BD52D-8150-4AA9-9AC8-E20376DCFE52}</Project>
+      <Project>{DC0EABED-F42C-405B-97DA-C554508522B1}</Project>
       <Name>PaperClip.Reactive</Name>
     </ProjectReference>
     <ProjectReference Include="..\PaperClip.Trackers\PaperClip.Trackers.csproj">
@@ -187,7 +209,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\NotifyIcon.ico" />
+    <Resource Include="Resources\NotifyIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Controllers\CopypastaControllerStateDiagram.xml" />

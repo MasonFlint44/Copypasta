@@ -15,10 +15,7 @@ namespace Copypasta.Domain
         {
             _clipboardBindings[key] = clipboardData;
 
-            foreach (var observer in Subscribers)
-            {
-                observer.OnNext(new ClipboardBindingNotification(key, clipboardData));
-            }
+            Broadcast(new ClipboardBindingNotification(key, clipboardData));
         }
 
         public ClipboardDataModel GetBindingData(Key key)

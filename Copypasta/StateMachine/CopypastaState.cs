@@ -8,6 +8,7 @@
         MovingDataToClipboard,
         SimulatingCtrlV,
         BindingClipboardToKey,
+        ShowingClipboardBinding,
         RestoringClipboard,
         ClearingClipboard
     }

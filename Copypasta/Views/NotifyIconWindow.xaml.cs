@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using Copypasta.Domain.Interfaces;
 using Copypasta.ViewModels.Interfaces;
-using Hardcodet.Wpf.TaskbarNotification;
 
 namespace Copypasta.Views
 {
@@ -10,41 +11,39 @@ namespace Copypasta.Views
     /// </summary>
     public partial class NotifyIconWindow : Window
     {
-        private INotificationViewModel _notificationViewModel;
-        
-        public NotifyIconWindow(INotificationViewModel notificationViewModel, IHistoryMenuViewModel historyMenuViewModel)
+        private readonly INotificationDispatcher _notificationDispatcher;
+        private readonly IHistoryMenuViewModel _historyMenuViewModel;
+
+        public NotifyIconWindow(INotificationDispatcher notificationDispatcher, IHistoryMenuViewModel historyMenuViewModel)
         {
-            DataContextChanged += OnDataContextChanged;
-            DataContext = notificationViewModel;
+            _notificationDispatcher = notificationDispatcher;
+            _historyMenuViewModel = historyMenuViewModel;
 
             InitializeComponent();
-            ConfigureEventHandlers();
-            HistoryMenu.DataContext = historyMenuViewModel;
+            HistoryMenu.DataContext = _historyMenuViewModel;
+
+            _notificationDispatcher.Subscribe(notification =>
+            {
+                ShowNotification(notification.Notification);
+            });
         }
 
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void ShowNotification(INotificationBalloonViewModel notification)
         {
-            _notificationViewModel = e.NewValue as INotificationViewModel ?? throw new InvalidOperationException("DataContext must be of type: INotificationViewModel");
-        }
+            if (notification == null) { return; }
 
-        private void ConfigureEventHandlers()
-        {
-            _notificationViewModel.ShowCopyingNotificationEvent += (_sender, args) =>
+            var notificationBalloon = new NotificationBalloon(notification);
+            notificationBalloon.ClosingAnimationCompleted += (o, eventArgs) =>
             {
-                NotifyIcon.ShowBalloonTip("Copying...", "Press a key to save clipboard", BalloonIcon.None);
+                NotifyIcon.CloseBalloon();
+
+                if(!notification.ClosedCommand.CanExecute(null)) { return; }
+                notification.ClosedCommand.Execute(null);
             };
-            _notificationViewModel.ShowPastingNotificationEvent += (_sender, args) =>
-            {
-                NotifyIcon.ShowBalloonTip("Pasting...", "Press a key to paste data", BalloonIcon.None);
-            };
-            _notificationViewModel.HideNotificationEvent += (_sender, args) =>
-            {
-                NotifyIcon.HideBalloonTip();
-            };
-            NotifyIcon.TrayBalloonTipClosed += (o, args) =>
-            {
-                _notificationViewModel.NotificationTimeout();
-            };
+            // NotificationBalloon handles animation and timeout itself
+            NotifyIcon.ShowCustomBalloon(notificationBalloon, PopupAnimation.None, null);
+            // Place popup against right edge of screen
+            NotifyIcon.CustomBalloon.HorizontalOffset += 1;
         }
     }
 }

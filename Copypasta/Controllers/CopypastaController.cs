@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Input;
 using WindowsInput;
@@ -6,7 +7,6 @@ using WindowsInput.Native;
 using Copypasta.Domain.Interfaces;
 using Copypasta.Models;
 using Copypasta.StateMachine;
-using Copypasta.ViewModels.Interfaces;
 using PaperClip.Hotkeys.Interfaces;
 using PaperClip.Trackers.Interfaces;
 using Stateless;
@@ -23,7 +23,6 @@ namespace Copypasta.Controllers
         private readonly IHotkey _escHotkey;
         private readonly IKeyTracker _keyTracker;
         private readonly IInputSimulator _inputSimulator;
-        private readonly INotificationViewModel _notificationViewModel;
         private readonly StateMachine<CopypastaState, CopypastaTrigger> _copypastaStateMachine;
         private readonly StateMachine<CopypastaState, CopypastaTrigger>.TriggerWithParameters<Key> _keyPressedTrigger;
 
@@ -36,8 +35,7 @@ namespace Copypasta.Controllers
         private bool _escPressHandled;
 
         public CopypastaController(IClipboard clipboard, IClipboardHistoryManager clipboardHistoryManager,
-            IClipboardBindingManager clipboardBindingManager, IHotkey ctrlVHotkey, IHotkey ctrlCHotkey, IHotkey escHotkey, 
-            IKeyTracker keyTracker, IInputSimulator inputSimulator, INotificationViewModel notificationViewModel)
+            IClipboardBindingManager clipboardBindingManager, IHotkey ctrlVHotkey, IHotkey ctrlCHotkey, IHotkey escHotkey,
         {
             _clipboard = clipboard;
             _clipboardHistoryManager = clipboardHistoryManager;
@@ -47,7 +45,7 @@ namespace Copypasta.Controllers
             _escHotkey = escHotkey;
             _keyTracker = keyTracker;
             _inputSimulator = inputSimulator;
-            _notificationViewModel = notificationViewModel;
+            _notificationDispatcher = notificationDispatcher;
             _copypastaStateMachine = new StateMachine<CopypastaState, CopypastaTrigger>(CopypastaState.Idle);
             _keyPressedTrigger = _copypastaStateMachine.SetTriggerParameters<Key>(CopypastaTrigger.KeyPressed);
 
@@ -62,11 +60,13 @@ namespace Copypasta.Controllers
                 Console.WriteLine("ClipboardUpdated");
                 _copypastaStateMachine.Fire(CopypastaTrigger.ClipboardUpdated);
             });
-            _notificationViewModel.NotificationTimeoutEvent += (sender, args) =>
+            _notificationDispatcher.Subscribe(notification =>
             {
+                if (notification.Notification != null) { return; }
+
                 Console.WriteLine("NotificationTimeout");
                 _copypastaStateMachine.Fire(CopypastaTrigger.Timeout);
-            };
+            });
             _ctrlVHotkey.HotkeyPressed += (sender, args) =>
             {
                 Console.WriteLine($"CtrlVPressed: Handled={_ctrlVHandled}");
@@ -82,7 +82,7 @@ namespace Copypasta.Controllers
             _keyTracker.KeyPressed += (sender, args) =>
             {
                 if (_keyTracker.Modifiers != ModifierKeys.None) { return; }
-                if(_escHotkey.IsPressed) { return; }
+                if (_escHotkey.IsPressed) { return; }
 
                 Console.WriteLine($"KeyPressed: Key={args.Key}, Handled={_keyPressHandled}");
                 args.Handled = _keyPressHandled;
@@ -120,7 +120,7 @@ namespace Copypasta.Controllers
                 .Ignore(CopypastaTrigger.KeyPressed)
                 .Ignore(CopypastaTrigger.ModifierPressed)
                 .Ignore(CopypastaTrigger.Timeout)
-                .OnEntry(() =>
+                .OnEntry(transition =>
                 {
                     _ctrlCHandled = false;
                     _ctrlVHandled = true;
@@ -128,7 +128,7 @@ namespace Copypasta.Controllers
                     _keyPressHandled = false;
                     _modifierPressHandled = false;
 
-                    _notificationViewModel.HideNotification();
+                    _notificationDispatcher.CloseNotification();
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
                 });
@@ -153,13 +153,12 @@ namespace Copypasta.Controllers
                     var clipboardData = _clipboard.ClipboardData;
                     _historyRecordSwap = _clipboardHistoryManager.AddHistoryRecord(Key.None, clipboardData);
 
-                    _notificationViewModel.ShowNotification(CopypastaState.Copying);
+                    _notificationDispatcher.ShowNotification(new CopyingNotificationModel());
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.BindingClipboardToKey)
-                .SubstateOf(CopypastaState.Copying)
                 .Permit(CopypastaTrigger.ClipboardUpdated, CopypastaState.Copying)
                 .Ignore(CopypastaTrigger.CtrlCPressed)
                 .Permit(CopypastaTrigger.CtrlVPressed, CopypastaState.Pasting)
@@ -167,7 +166,7 @@ namespace Copypasta.Controllers
                 .Ignore(CopypastaTrigger.KeyPressed)
                 .Ignore(CopypastaTrigger.ModifierPressed)
                 .Ignore(CopypastaTrigger.Timeout)
-                .Permit(CopypastaTrigger.ClipboardBound, CopypastaState.Idle)
+                .Permit(CopypastaTrigger.ClipboardBound, CopypastaState.ShowingClipboardBinding)
                 .OnEntryFrom(_keyPressedTrigger, key =>
                 {
                     _ctrlCHandled = false;
@@ -181,6 +180,31 @@ namespace Copypasta.Controllers
 
                     // Update clipboard history
                     _historyRecordSwap.Key = key;
+
+                    Console.WriteLine($"State={_copypastaStateMachine.State}");
+                });
+
+            _copypastaStateMachine.Configure(CopypastaState.ShowingClipboardBinding)
+                .Permit(CopypastaTrigger.ClipboardUpdated, CopypastaState.Copying)
+                .Ignore(CopypastaTrigger.CtrlCPressed)
+                .Permit(CopypastaTrigger.CtrlVPressed, CopypastaState.Pasting)
+                .Permit(CopypastaTrigger.EscPressed, CopypastaState.Idle)
+                .Ignore(CopypastaTrigger.KeyPressed)
+                .Ignore(CopypastaTrigger.ModifierPressed)
+                .Permit(CopypastaTrigger.Timeout, CopypastaState.Idle)
+                .OnEntry(() =>
+                {
+                    _ctrlCHandled = false;
+                    _ctrlVHandled = true;
+                    _escPressHandled = false;
+                    _keyPressHandled = false;
+                    _modifierPressHandled = false;
+
+                    _notificationDispatcher.ShowNotification(new BoundNotificationModel
+                    {
+                        Key = _historyRecordSwap.Key,
+                        ClipboardData = _historyRecordSwap.ClipboardData
+                    });
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
                 });
@@ -201,13 +225,12 @@ namespace Copypasta.Controllers
                     _keyPressHandled = true;
                     _modifierPressHandled = false;
 
-                    _notificationViewModel.ShowNotification(CopypastaState.Pasting);
+                    _notificationDispatcher.ShowNotification(new PastingNotificationModel());
 
                     Console.WriteLine($"State={_copypastaStateMachine.State}");
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.MovingDataToClipboard)
-                .SubstateOf(CopypastaState.Pasting)
                 .Permit(CopypastaTrigger.ClipboardUpdated, CopypastaState.SimulatingCtrlV)
                 .Ignore(CopypastaTrigger.CtrlCPressed)
                 .Ignore(CopypastaTrigger.CtrlVPressed)
@@ -242,7 +265,6 @@ namespace Copypasta.Controllers
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.SimulatingCtrlV)
-                .SubstateOf(CopypastaState.Pasting)
                 .Ignore(CopypastaTrigger.ClipboardUpdated)
                 .Ignore(CopypastaTrigger.CtrlCPressed)
                 .Permit(CopypastaTrigger.CtrlVPressed, CopypastaState.RestoringClipboard)
@@ -271,7 +293,6 @@ namespace Copypasta.Controllers
                 });
 
             _copypastaStateMachine.Configure(CopypastaState.RestoringClipboard)
-                .SubstateOf(CopypastaState.Pasting)
                 .Permit(CopypastaTrigger.ClipboardUpdated, CopypastaState.Idle)
                 .Ignore(CopypastaTrigger.CtrlCPressed)
                 .Permit(CopypastaTrigger.CtrlVPressed, CopypastaState.Pasting)

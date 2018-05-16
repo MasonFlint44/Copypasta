@@ -4,17 +4,17 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace PaperClip.Collections
+namespace Copypasta.Views.Helpers
 {
-    public class EmptyListToVisibleVisibilityConverter : IValueConverter
+    public class EmptyListToCollapsedVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is IList list) || list.Count == 0)
             {
-                return Visibility.Visible;
+                return Visibility.Collapsed;
             }
-            return Visibility.Collapsed;
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

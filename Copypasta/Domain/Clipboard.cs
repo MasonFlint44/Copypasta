@@ -14,10 +14,7 @@ namespace Copypasta.Domain
             _clipboard = clipboard;
             _clipboard.ClipboardUpdated += (sender, args) =>
             {
-                foreach (var observer in Subscribers)
-                {
-                    observer.OnNext(new ClipboardNotification());
-                }
+                Broadcast(new ClipboardNotification());
             };
         }
 

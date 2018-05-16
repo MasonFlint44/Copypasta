@@ -5,7 +5,7 @@ using Copypasta.ViewModels.Interfaces;
 
 namespace Copypasta.ViewModels.Designer
 {
-    public class DesignerHistoryRecordViewModel: IHistoryRecordViewModel
+    internal class DesignerHistoryRecordViewModel: IHistoryRecordViewModel
     {
         public string ClipboardText { get; set; } = "This is some test text to test the text";
         public string Key { get; set; } = System.Windows.Input.Key.A.ToString();

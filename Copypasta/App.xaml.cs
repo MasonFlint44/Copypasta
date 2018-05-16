@@ -26,11 +26,11 @@ namespace Copypasta
             var ctrlVHotkey = new Hotkey(keyTracker, new KeyCombo(ModifierKeys.Control, Key.V));
             var escHotkey = new Hotkey(keyTracker, new KeyCombo(Key.Escape));
             var inputSimulator = new InputSimulator();
-            var notificationViewModel = new NotificationViewModel();
+            var notificationDispatcher = new NotificationDispatcher();
             var historyMenuViewModel = new HistoryMenuViewModel(clipboardHistoryManager);
             var copypasta = new CopypastaController(clipboard, clipboardHistoryManager, clipboardBindingManager,
-                ctrlVHotkey, ctrlCHotkey, escHotkey, keyTracker, inputSimulator, notificationViewModel);
-            var notifyIconWindow = new NotifyIconWindow(notificationViewModel, historyMenuViewModel);
+                ctrlVHotkey, ctrlCHotkey, escHotkey, keyTracker, inputSimulator, notificationDispatcher);
+            var notifyIconWindow = new NotifyIconWindow(notificationDispatcher, historyMenuViewModel);
         }
     }
 }

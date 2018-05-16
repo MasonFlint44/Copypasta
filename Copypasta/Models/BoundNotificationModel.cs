@@ -6,9 +6,9 @@ using PaperClip.Reactive;
 
 namespace Copypasta.Models
 {
-    public class HistoryRecordModel : IHistoryRecordModel
+    public class BoundNotificationModel : IBoundNotificationModel
     {
-        private readonly Subscription<HistoryRecordNotification> _subscription = new Subscription<HistoryRecordNotification>();
+        private readonly Subscription<BoundNotification> _subscription = new Subscription<BoundNotification>();
 
         private Key _key;
         public Key Key
@@ -19,7 +19,7 @@ namespace Copypasta.Models
                 _key = value;
                 foreach (var observer in _subscription.Subscribers)
                 {
-                    observer.OnNext(new HistoryRecordNotification(value, ClipboardData));
+                    observer.OnNext(new BoundNotification(value, ClipboardData));
                 }
             }
         }
@@ -33,22 +33,16 @@ namespace Copypasta.Models
                 _clipboardData = value;
                 foreach (var observer in _subscription.Subscribers)
                 {
-                    observer.OnNext(new HistoryRecordNotification(Key, value));
+                    observer.OnNext(new BoundNotification(Key, value));
                 }
             }
         }
 
-        public HistoryRecordModel(Key key, ClipboardDataModel clipboardData)
-        {
-            Key = key;
-            ClipboardData = clipboardData;
-        }
-
-        public IDisposable Subscribe(IObserver<HistoryRecordNotification> observer)
+        public IDisposable Subscribe(IObserver<BoundNotification> observer)
         {
             var unsubscriber = _subscription.Subscribe(observer);
             // Send notification of current state
-            observer.OnNext(new HistoryRecordNotification(Key, ClipboardData));
+            observer.OnNext(new BoundNotification(Key, ClipboardData));
             return unsubscriber;
         }
     }

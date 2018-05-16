@@ -2,9 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Copypasta"
-             xmlns:collections="clr-namespace:PaperClip.Collections;assembly=PaperClip.Collections"
+             xmlns:helpers="clr-namespace:Copypasta.Views.Helpers"
              Startup="OnStartup">
     <Application.Resources>
-        <collections:EmptyListToVisibleVisibilityConverter x:Key="EmptyListToVisibleVisibilityConverter" />
+        <helpers:EmptyListToVisibleVisibilityConverter x:Key="EmptyListToVisibleVisibilityConverter" />
+        <helpers:ImageToImageSourceConverter x:Key="ImageToImageSourceConverter"/>
     </Application.Resources>
 </Application>

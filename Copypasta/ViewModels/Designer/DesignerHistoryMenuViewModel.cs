@@ -6,7 +6,7 @@ using Copypasta.ViewModels.Interfaces;
 
 namespace Copypasta.ViewModels.Designer
 {
-    public class DesignerHistoryMenuViewModel: IHistoryMenuViewModel
+    internal class DesignerHistoryMenuViewModel: IHistoryMenuViewModel
     {
         public ObservableCollection<IHistoryRecordViewModel> HistoryList { get; } = new ObservableCollection<IHistoryRecordViewModel>();
 

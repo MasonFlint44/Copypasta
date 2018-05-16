@@ -15,5 +15,29 @@ namespace PaperClip.Reactive
             }
             return new Unsubscriber<T>(Subscribers, observer);
         }
+
+        public void Broadcast(T notification)
+        {
+            foreach (var subscriber in Subscribers)
+            {
+                subscriber.OnNext(notification);
+            }
+        }
+
+        public void BroadcastError(Exception error)
+        {
+            foreach (var subscriber in Subscribers)
+            {
+                subscriber.OnError(error);
+            }
+        }
+
+        public void EndBroadcast()
+        {
+            foreach(var subscriber in Subscribers)
+            {
+                subscriber.OnCompleted();
+            }
+        }
     }
 }

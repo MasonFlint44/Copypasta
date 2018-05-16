@@ -3,8 +3,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using Copypasta.Annotations;
-using Copypasta.Models;
+using Copypasta.Models.Interfaces;
 using Copypasta.ViewModels.Interfaces;
 
 namespace Copypasta.ViewModels
@@ -35,16 +36,22 @@ namespace Copypasta.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public HistoryRecordViewModel(HistoryRecordModel historyRecord)
+        public HistoryRecordViewModel(IHistoryRecordModel historyRecord)
         {
             historyRecord.Subscribe(notification =>
             {
-                Key = notification.Key.ToString();
+                Key = GetText(notification.Key);
                 ClipboardText = GetText(notification.ClipboardData);
             });
         }
 
-        public static string GetText(ClipboardDataModel clipboardData)
+        private static string GetText(Key key)
+        {
+            if(key == System.Windows.Input.Key.None) { return string.Empty; }
+            return key.ToString();
+        }
+
+        private static string GetText(IClipboardDataModel clipboardData)
         {
             if (!clipboardData.ClipboardData.TryGetValue(DataFormats.UnicodeText.ToLower(), out var stream))
             {

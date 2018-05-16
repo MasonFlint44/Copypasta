@@ -37,13 +37,11 @@ namespace Copypasta.Domain
 
             var addedRecord = new HistoryRecordModel(key, clipboardData);
             _history.Add(addedRecord);
-            
+
             // Notify observers and log notification
             var notification = new ClipboardHistoryNotification(addedRecord, wasItemRemoved, removedRecord);
-            foreach (var observer in _subscription.Subscribers)
-            {
-                observer.OnNext(notification);
-            }
+            _subscription.Broadcast(notification);
+
             if (_notifications.Count == RecordCount)
             {
                 _notifications.Remove(_notifications.First());

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Copypasta.Annotations;
 using Copypasta.Domain.Interfaces;
-using Copypasta.Models;
+using Copypasta.Models.Interfaces;
 using Copypasta.ViewModels.Interfaces;
 
 namespace Copypasta.ViewModels
@@ -13,7 +13,7 @@ namespace Copypasta.ViewModels
     public class HistoryMenuViewModel: IHistoryMenuViewModel
     {
         private readonly IClipboardHistoryManager _clipboardHistoryManager;
-        private readonly Dictionary<HistoryRecordModel, HistoryRecordViewModel> _modelToViewModelMappings;
+        private readonly Dictionary<IHistoryRecordModel, IHistoryRecordViewModel> _modelToViewModelMappings;
 
         public ObservableCollection<IHistoryRecordViewModel> HistoryList { get; }
 
@@ -22,7 +22,7 @@ namespace Copypasta.ViewModels
         public HistoryMenuViewModel(IClipboardHistoryManager clipboardHistoryManager)
         {
             _clipboardHistoryManager = clipboardHistoryManager;
-            _modelToViewModelMappings = new Dictionary<HistoryRecordModel, HistoryRecordViewModel>(_clipboardHistoryManager.RecordCount);
+            _modelToViewModelMappings = new Dictionary<IHistoryRecordModel, IHistoryRecordViewModel>(_clipboardHistoryManager.RecordCount);
             HistoryList = new ObservableCollection<IHistoryRecordViewModel>();
             
             _clipboardHistoryManager.Subscribe(notification =>
