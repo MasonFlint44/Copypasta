@@ -9,32 +9,27 @@
              d:DataContext="{d:DesignInstance designer:DesignerHistoryMenuViewModel, IsDesignTimeCreatable=True}">
     <Border Background="#333333"
             Opacity=".9"
-            Padding="10">
-        <StackPanel Width="230">
-            <Label Padding="5 0 5 5"
+            Width="250"
+            Padding="0 0 0 10">
+        <StackPanel>
+            <Label Padding="10"
                    Foreground="White"
                    Content="History"/>
-            <Border BorderBrush="#7F7F7F"
-                    BorderThickness="0 1 0 0" 
-                    Visibility="{Binding Path=HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                <TextBlock Padding="5" 
-                           Foreground="White"
-                           Visibility="{Binding Path=HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"
-                           Text="Empty"/>
-            </Border>
-            <ItemsControl x:Name="HistoryPanel"
-                          ItemsSource="{Binding Path=HistoryList, UpdateSourceTrigger=PropertyChanged}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:HistoryRecord DataContext="{Binding UpdateSourceTrigger=PropertyChanged}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <StackPanel x:Name="HistoryPanel">
+                <local:EmptyHistoryRecord Visibility="{Binding Path=HistoryList, Converter={StaticResource EmptyListToVisibleVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <ItemsControl ItemsSource="{Binding Path=HistoryList, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:HistoryRecord DataContext="{Binding UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </StackPanel>
     </Border>
 </UserControl>

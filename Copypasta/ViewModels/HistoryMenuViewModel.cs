@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Copypasta.Annotations;
 using Copypasta.Domain.Interfaces;
@@ -15,7 +17,9 @@ namespace Copypasta.ViewModels
         private readonly IClipboardHistoryManager _clipboardHistoryManager;
         private readonly Dictionary<IHistoryRecordModel, IHistoryRecordViewModel> _modelToViewModelMappings;
 
-        public ObservableCollection<IHistoryRecordViewModel> HistoryList { get; }
+        private readonly List<IHistoryRecordViewModel> _historyList;
+        public ObservableCollection<IHistoryRecordViewModel> HistoryList => 
+            new ObservableCollection<IHistoryRecordViewModel>(_historyList.AsEnumerable().Reverse());
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -23,20 +27,20 @@ namespace Copypasta.ViewModels
         {
             _clipboardHistoryManager = clipboardHistoryManager;
             _modelToViewModelMappings = new Dictionary<IHistoryRecordModel, IHistoryRecordViewModel>(_clipboardHistoryManager.RecordCount);
-            HistoryList = new ObservableCollection<IHistoryRecordViewModel>();
-            
+            _historyList = new List<IHistoryRecordViewModel>(_clipboardHistoryManager.RecordCount);
+
             _clipboardHistoryManager.Subscribe(notification =>
             {
                 if (notification.WasRecordRemoved)
                 {
                     var removedRecord = _modelToViewModelMappings[notification.RemovedRecord];
                     _modelToViewModelMappings.Remove(notification.RemovedRecord);
-                    HistoryList.Remove(removedRecord);
+                    _historyList.Remove(removedRecord);
                 }
 
                 var addedRecord = new HistoryRecordViewModel(notification.AddedRecord);
                 _modelToViewModelMappings[notification.AddedRecord] = addedRecord;
-                HistoryList.Add(addedRecord);
+                _historyList.Add(addedRecord);
 
                 OnPropertyChanged(nameof(HistoryList));
             });

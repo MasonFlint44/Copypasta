@@ -7,23 +7,21 @@
              xmlns:designer="clr-namespace:Copypasta.ViewModels.Designer"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance designer:DesignerHistoryRecordViewModel, IsDesignTimeCreatable=True}">
-    <Border BorderBrush="#7F7F7F"
-            BorderThickness="0 1 0 0">
-        <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Center">
-            <Border BorderThickness="0 0 1 0" 
-                    BorderBrush="#7F7F7F" 
-                    Padding="0 5">
-                <TextBlock x:Name="KeyTextBlock"
-                           Foreground="White" 
-                           Width="30" 
-                           TextAlignment="Center"
-                           Text="{Binding Key}"/>
-            </Border>
-            <TextBlock x:Name="ClipboardContentTextBlock"
-                       Padding="5 0 0 0" 
+    <Border Background="#555555"
+            Width="230"
+            Height="25"
+            Margin="10 2.5">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="KeyTextBlock"
                        Foreground="White" 
-                       Width="200" 
+                       Margin="5 0"
+                       Width="30"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="{Binding Key}"/>
+            <TextBlock x:Name="ClipboardContentTextBlock"
+                       Width="185"
+                       Foreground="White" 
                        VerticalAlignment="Center" 
                        TextTrimming="CharacterEllipsis"
                        Text="{Binding ClipboardText}"/>
